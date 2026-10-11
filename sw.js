@@ -1,4 +1,4 @@
-const CACHE = 'workout-v3';
+const CACHE = 'workout-v4';
 const ASSETS = ['./', 'index.html', 'styles.css', 'app.js', 'data.js', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-180.png',
   'guides/day_a.png', 'guides/day_b.png', 'guides/day_a.pdf', 'guides/day_b.pdf'];

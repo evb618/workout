@@ -97,6 +97,7 @@ async function sync(manual) {
   } catch (e) {
     S.sync.lastErr = (e && e.message) || String(e); localStorage.setItem(KEY, JSON.stringify(S));
     if (manual) toast('Sync failed: ' + S.sync.lastErr);
+    clearTimeout(syncTimer); syncTimer = setTimeout(() => sync(), 60000); // retry in a minute
   } finally { syncing = false; if (dataSig() !== S.sync.sig && !S.sync.lastErr) scheduleSync(); }
 }
 window.addEventListener('online', () => sync());
@@ -193,7 +194,7 @@ async function keepAwake(on) {
     if (!on && wake) { await wake.release(); wake = null; }
   } catch (e) {}
 }
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && S.draft) keepAwake(true); tick(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { if (S.draft) keepAwake(true); if (typeof sync === 'function') sync(); } tick(); });
 
 /* ---------- timer engine (phases; based on wall clock so it survives the screen locking) ---------- */
 let T = null; // {phases:[{label,sec,cls}], i, end, paused, left, onDone}
